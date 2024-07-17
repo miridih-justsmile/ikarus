@@ -2,18 +2,32 @@ plugins {
     id 'java'
 }
 
-group = 'com.justsmile'
-version = '1.0-SNAPSHOT'
+allprojects {
+    group = 'com.example'
+    version = '0.0.1-SNAPSHOT'
 
-repositories {
-    mavenCentral()
+    repositories {
+        mavenCentral()
+    }
+
 }
+subprojects {
+    apply plugin: 'java'
 
-dependencies {
-    testImplementation platform('org.junit:junit-bom:5.10.0')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
-}
+    sourceCompatibility = '17'
 
-test {
-    useJUnitPlatform()
+    dependencies {
+        implementation 'org.projectlombok:lombok:1.18.26'
+        annotationProcessor 'org.projectlombok:lombok:1.18.26'
+        testImplementation platform('org.junit:junit-bom:5.10.0')
+        testImplementation 'org.junit.jupiter:junit-jupiter'
+    }
+
+    test {
+        useJUnitPlatform()
+    }
+
+    tasks.withType(JavaCompile) {
+        options.annotationProcessorPath = configurations.annotationProcessor
+    }
 }

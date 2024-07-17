@@ -1,0 +1,8 @@
+rootProject.name = 'ikarus'
+include 'core'
+include 'astrivest'
+include 'core:utils'
+findProject(':core:utils')?.name = 'utils'
+include 'astrivest:core'
+findProject(':astrivest:core')?.name = 'core'
+

@@ -6,13 +6,18 @@ plugins {
 
 group = 'com.justsmile'
 version = '1.0-SNAPSHOT'
-sourceCompatibility = '17' // Java 버전 설정
+
+ext {
+    set('spring-security.version', '6.3.1')
+}
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf' // Spring Boot Thymeleaf Starter 추가
+    implementation "org.springframework.boot:spring-boot-starter-security" // Spring Boot Security Starter 추가
     implementation 'org.springframework.boot:spring-boot-starter-web' // Spring Boot Web Starter 추가
     implementation project(':core')
     implementation project(':core:utils')

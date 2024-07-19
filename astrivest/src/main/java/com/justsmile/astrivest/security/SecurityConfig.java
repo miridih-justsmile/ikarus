@@ -5,6 +5,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -14,11 +19,25 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(final HttpSecurity http) throws Exception {
         return http.authorizeHttpRequests(authorizeRequests ->
-                        authorizeRequests.requestMatchers("/", "/index").permitAll() // 인증 없이 접근 허용할 URL
-                                .anyRequest().authenticated() // 다른 모든 요청은 인증 필요
+                        authorizeRequests
+                                .requestMatchers("/", "/index", "/login", "/css/**", "/js/**", "/images/**")
+                                .permitAll()
+                                .anyRequest()
+                                .authenticated()
                 )
-                .formLogin(formLogin -> formLogin.loginPage("/login").permitAll())
+                .formLogin(formLogin -> formLogin.defaultSuccessUrl("/index").permitAll())
                 .logout(LogoutConfigurer::permitAll)
                 .build();
+    }
+
+    @Bean
+    public UserDetailsService userDetailsService() {
+        UserDetails user = User.builder()
+                .username("justsmile")
+                .passwordEncoder(new BCryptPasswordEncoder()::encode)
+                .password("password")
+                .roles("USER")
+                .build();
+        return new InMemoryUserDetailsManager(user);
     }
 }
